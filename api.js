@@ -1,4 +1,4 @@
-const client = require('./connection.js')
+const pool = require('./connection.js')
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
@@ -13,4 +13,4 @@ app.get("/", (req, res) => {
 	res.send("Hello World");
 });
 
-
+pool.connect();
