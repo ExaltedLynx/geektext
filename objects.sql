@@ -22,3 +22,6 @@ CREATE TABLE objects.books(
 	city 		    TEXT DEFAULT NULL,
 	year			TEXT DEFAULT NULL
 );
+
+grant select, insert, delete on objects.users to dcol1553kdbata;
+grant select, insert, delete on objects.books to dcol1553kdbata;
