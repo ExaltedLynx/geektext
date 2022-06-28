@@ -33,8 +33,41 @@ const getUserById = (request, response) => {
 	})
 }
 
+const postUser = (request, response) => {	
+	var username 	= request.body.username;
+	var password 	= request.body.password;
+	var name 		= request.body.name;
+	console.log("Username = "+username+
+				", Name is "+name);
+	
+	var query = "INSERT INTO objects.users(\
+					object_id\
+					, user_id\
+					, username\
+					, password\
+					, name\
+				) VALUES (\
+					nextval('object_id_seq')\
+					, nextval('user_id_seq')\
+					, $1\
+					, $2\
+					, $3\
+				)"
+	var values = [username
+				  , password
+				  , name]
+	pool.query(query, values, (error, results) => {
+		if (error) {
+			throw error
+		};
+		response.status(200).json(results.rows);
+		response.end("Successfully created user for "+username);
+	})
+}
+
 module.exports = {
 	getUsers,
-	getUserById
+	getUserById,
+	postUser
 }
 

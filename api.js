@@ -29,3 +29,5 @@ app.get('/', (request, response) => {
   
 app.get('/users', db.getUsers);
 app.get('/users/:object_id', db.getUserById);
+
+app.post('/users/new', db.postUser);
