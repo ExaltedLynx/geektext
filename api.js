@@ -40,4 +40,17 @@ app.get('/book/genre/:bookgenre', (req, res) => {
 	pool.end;
 })
 
+app.get('/book/copiessold', (req, res) => {
+	pool.query(`Select * from book order by copiessold desc limit 10`, (err, result) => {
+		if (!err) {
+			res.send(result.rows);
+		}
+		else {
+			res.send(err);
+		}
+	});
+	pool.end;
+})
+
+
 pool.connect();
