@@ -56,12 +56,12 @@ const postUser = (request, response) => {
 	var values = [username
 				  , password
 				  , name]
+
 	pool.query(query, values, (error, results) => {
+		response.status(200).json(results);
 		if (error) {
-			throw error
+			console.log(error)
 		};
-		response.status(200).json(results.rows);
-		response.end("Successfully created user for "+username);
 	})
 }
 
