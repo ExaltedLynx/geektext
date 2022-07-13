@@ -31,3 +31,36 @@ app.get('/users', db.getUsers);
 app.get('/users/:object_id', db.getUserById);
 
 app.post('/users/new', db.postUser);
+
+
+/*
+  Book Browsing and Sorting Features
+*/
+
+//filters books in database by user chosen genre
+app.get('/book', (req, res) => {
+	pool.query(`Select * from book`, (err, result) => {
+		if (!err) {
+			res.send(result.rows);
+		}
+		else {
+			res.send(err);
+		}
+	});
+	pool.end;
+})
+
+//filters books by top 10 most sold in descending order
+app.get('/book/copiessold', (req, res) => {
+	pool.query(`Select * from book order by copiessold desc limit 10`, (err, result) => {
+		if (!err) {
+			res.send(result.rows);
+		}
+		else {
+			res.send(err);
+		}
+	});
+	pool.end;
+})
+
+pool.connect();
