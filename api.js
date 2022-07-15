@@ -1,10 +1,20 @@
 const pool = require('./connection.js')
+const db = require('./connection')
 const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
+const port = 3000;
 
-app.listen(3000, () =>
+
+app.use(bodyParser.json())
+app.use(
+  bodyParser.urlencoded({
+    extended: true,
+  })
+)
+
+app.listen(port, () =>
 {
 	console.log("Server is now listening at port 3000")
 })
@@ -12,6 +22,20 @@ app.listen(3000, () =>
 app.get("/", (req, res) => {
 	res.send("Hello World");
 });
+
+app.get('/', (request, response) => {
+	response.json({ info: 'Node.js, Express, and Postgres API' })
+});
+  
+app.get('/users', db.getUsers);
+app.get('/users/:object_id', db.getUserById);
+
+app.post('/users/new', db.postUser);
+
+
+/*
+  Book Browsing and Sorting Features
+*/
 
 //filters books in database by user chosen genre
 app.get('/book', (req, res) => {
@@ -26,6 +50,7 @@ app.get('/book', (req, res) => {
 	pool.end;
 })
 
+<<<<<<< HEAD
 
 //filters books in database by user chosen genre
 app.get('/book/genre/:bookgenre', (req, res) => {
@@ -40,6 +65,10 @@ app.get('/book/genre/:bookgenre', (req, res) => {
 	pool.end;
 })
 
+//filters books by top 10 most sold
+=======
+//filters books by top 10 most sold in descending order
+>>>>>>> a9c08771844911e392ad50648d09ffbba2eebbc1
 app.get('/book/copiessold', (req, res) => {
 	pool.query(`Select * from book order by copiessold desc limit 10`, (err, result) => {
 		if (!err) {
@@ -52,5 +81,20 @@ app.get('/book/copiessold', (req, res) => {
 	pool.end;
 })
 
+<<<<<<< HEAD
+//retrieves all books from database in pages of x books at a time
+app.get('/book/:numofbook/:pagenum', (req, res) => {
+	pool.query(`Select * from book limit '${req.params.numofbook}' offset'${(req.params.pagenum * req.params.numofbook) - req.params.numofbook}'`, (err, result) => {
+		if (!err) {
+			res.send(result.rows);
+		}
+		else {
+			res.send(err);
+		}
+	});
+	pool.end;
+})
 
+=======
+>>>>>>> a9c08771844911e392ad50648d09ffbba2eebbc1
 pool.connect();
