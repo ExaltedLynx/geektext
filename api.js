@@ -50,7 +50,9 @@ app.get('/book', (req, res) => {
 	pool.end;
 })
 
-<<<<<<< HEAD
+/*
+  Book Browsing and Sorting Features
+*/
 
 //filters books in database by user chosen genre
 app.get('/book/genre/:bookgenre', (req, res) => {
@@ -65,10 +67,7 @@ app.get('/book/genre/:bookgenre', (req, res) => {
 	pool.end;
 })
 
-//filters books by top 10 most sold
-=======
 //filters books by top 10 most sold in descending order
->>>>>>> a9c08771844911e392ad50648d09ffbba2eebbc1
 app.get('/book/copiessold', (req, res) => {
 	pool.query(`Select * from book order by copiessold desc limit 10`, (err, result) => {
 		if (!err) {
