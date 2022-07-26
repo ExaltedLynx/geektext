@@ -38,10 +38,24 @@ app.post('/users/new', db.postUser);
 /*
   Book Browsing and Sorting Features
 */
+pool.connect();
 
 //filters books in database by user chosen genre
 app.get('/book', (req, res) => {
 	pool.query(`Select * from book`, (err, result) => {
+		if (!err) {
+			res.send(result.rows);
+		}
+		else {
+			res.send(err);
+		}
+	});
+	pool.end;
+})
+
+//filters books in database by user chosen genre
+app.get('/book/genre/:bookgenre', (req, res) => {
+	pool.query(`Select * from book where bookgenre ='${req.params.bookgenre}'`, (err, result) => {
 		if (!err) {
 			res.send(result.rows);
 		}
@@ -65,3 +79,15 @@ app.get('/book/copiessold', (req, res) => {
 	pool.end;
 })
 
+//retrieves all books from database in pages of x books at a time
+app.get('/book/:numofbook/:pagenum', (req, res) => {
+	pool.query(`Select * from book limit '${req.params.numofbook}' offset'${(req.params.pagenum * req.params.numofbook) - req.params.numofbook}'`, (err, result) => {
+		if (!err) {
+			res.send(result.rows);
+		}
+		else {
+			res.send(err);
+		}
+	});
+	pool.end;
+})
