@@ -1,6 +1,6 @@
 const { Pool } = require('pg');
 
-const pool= new Pool ({
+const pool = new Pool ({
 	host: "ec2-52-44-13-158.compute-1.amazonaws.com",
 	user: "pqmykrpeklbmmw",
 	port: 5432,
@@ -10,8 +10,6 @@ const pool= new Pool ({
     rejectUnauthorized: false,
   }
 })
-
-module.exports = pool;
 
 const getUsers = (request, response) => {
 	pool.query('SELECT * FROM objects.users ORDER BY object_id ASC, user_id ASC', (error, results) => {
@@ -31,6 +29,34 @@ const getUserById = (request, response) => {
 	  }
 	  response.status(200).json(results.rows)
 	})
+}
+
+const getUserBy = (request, response) => {
+	console.log(request.url);
+
+	//credit to https://stackoverflow.com/a/28856178 for urlParams (slightly modified by me)
+	if(request.url.includes('?name')){
+		var urlParams = request.url.split(/[?&]/).slice(1).map(function(paramPair) {
+			return paramPair.split(/=(.+)?/).slice(0, 2);
+		}).reduce(function (obj, pairArray) {            
+			obj[pairArray[0]] = pairArray[1];
+			return obj;
+		}, {});
+		console.log(urlParams.name);
+
+		var qstring = 'SELECT * FROM objects.users WHERE name = $1'.replace('$1', "'"+urlParams.name+"'");
+		qstring = qstring.replace('%20', ' ');
+
+		console.log(qstring);
+
+		pool.query(qstring, (error, results) => {
+		if (error) {
+			throw error
+		};
+		response.status(200).json(results.rows);
+		});
+	};
+
 }
 
 const postUser = (request, response) => {	
@@ -68,6 +94,8 @@ const postUser = (request, response) => {
 module.exports = {
 	getUsers,
 	getUserById,
-	postUser
+	getUserBy,
+	postUser,
+	pool
 }
 

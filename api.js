@@ -28,7 +28,9 @@ app.get('/', (request, response) => {
 });
   
 app.get('/users', db.getUsers);
-app.get('/users/:object_id', db.getUserById);
+app.get('/users/object_id=:object_id', db.getUserById);
+
+app.get('/users/search', db.getUserBy);
 
 app.post('/users/new', db.postUser);
 
@@ -63,4 +65,3 @@ app.get('/book/copiessold', (req, res) => {
 	pool.end;
 })
 
-pool.connect();
