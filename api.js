@@ -33,12 +33,13 @@ app.get('/users/object_id=:object_id', db.getUserById);
 app.get('/users/search', db.getUserBy);
 
 app.post('/users/new', db.postUser);
+app.post('/users/update', db.postUpdateUser);
 
 
 /*
   Book Browsing and Sorting Features
 */
-pool.connect();
+//pool.connect();
 
 //filters books in database by user chosen genre
 app.get('/book', (req, res) => {
