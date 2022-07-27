@@ -31,11 +31,3 @@ app.get('/', (request, response) => {
 });
 
 db.connect();
-
-/*
-app.get('/users', db.getUsers);
-
-app.get('/users/:object_id', db.getUserById);
-
-app.post('/users/new', db.postUser);
-*/

@@ -20,6 +20,74 @@ const getUserById = (request, response) => {
 	})
 }
 
+const getUserBy = (request, response) => {
+	console.log(request.url);
+
+	//credit to https://stackoverflow.com/a/28856178 for urlParams (slightly modified by me)
+	if (request.url.includes('?name')) {
+		var urlParams = request.url.split(/[?&]/).slice(1).map(function (paramPair) {
+			return paramPair.split(/=(.+)?/).slice(0, 2);
+		}).reduce(function (obj, pairArray) {
+			obj[pairArray[0]] = pairArray[1];
+			return obj;
+		}, {});
+		console.log(urlParams.name);
+
+		var qstring = 'SELECT * FROM objects.users WHERE name = $1'.replace('$1', "'" + urlParams.name + "'");
+		qstring = qstring.replace('%20', ' ');
+
+		console.log(qstring);
+
+		pool.query(qstring, (error, results) => {
+			if (error) {
+				throw error
+			};
+			response.status(200).json(results.rows);
+		});
+	};
+
+}
+
+const postUpdateUser = (request, response) => {
+
+	if (request.body.username != null && request.body.password != null) {
+		var username = request.body.username;
+		var password = request.body.password;
+
+		var query = 'SELECT username, password FROM objects.users WHERE username = $1 AND password = $2';
+		query = query.replace('%20', ' ');
+
+		var values = [username, password]
+
+		pool.query(query, values, (error, results) => {
+			response.status(200).json(results);
+			if (error) {
+				console.log(error)
+			};
+		})
+	};
+
+	/*//credit to https://stackoverflow.com/a/28856178 for urlParams (slightly modified by me)
+	if(request.url.includes('?')){
+		var urlParams = request.url.split(/[?&]/).slice(1).map(function(paramPair) {
+			return paramPair.split(/=(.+)?/).slice(0, 2);
+		}).reduce(function (obj, pairArray) {            
+			obj[pairArray[0]] = pairArray[1];
+			return obj;
+		}, {});
+		console.log(urlParams);
+		var qstring = 'SELECT * FROM objects.users WHERE name = $1'.replace('$1', "'"+urlParams.name+"'");
+		qstring = qstring.replace('%20', ' ');
+		console.log(qstring);
+		pool.query(qstring, (error, results) => {
+		if (error) {
+			throw error
+		};
+		response.status(200).json(results.rows);
+		});
+	};*/
+}
+
 const postUser = (request, response) => {
 	var username = request.body.username;
 	var password = request.body.password;
@@ -55,5 +123,7 @@ const postUser = (request, response) => {
 module.exports = {
 	getUsers,
 	getUserById,
-	postUser
+	postUser,
+	postUpdateUser,
+	getUserBy
 }
