@@ -1,5 +1,6 @@
 const bookSearchRoutes = require('./src/booksearch/routes.js');
 const userRoutes = require('./src/users/routes.js')
+const shoppingCartRoutes = require('./src/shoppingCart/shoppingCart.js')
 const express = require('express');
 const app = express();
 const db = require('./connection')
@@ -19,6 +20,12 @@ app.use(
 app.use("/book", bookSearchRoutes);
 
 app.use("/users", userRoutes);
+
+/*
+Shopping Cart Features
+*/
+
+//app.use("/cart", shoppingCart);
 
 app.listen(port, () =>
 {
