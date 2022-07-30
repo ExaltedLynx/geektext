@@ -25,7 +25,6 @@ app.use("/users", userRoutes);
 Shopping Cart Features
 */
 
-
 //app.use("/cart", shoppingCart);
 
 app.listen(port, () =>
